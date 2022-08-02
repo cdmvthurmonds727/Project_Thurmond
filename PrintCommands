@@ -1,0 +1,5 @@
+print("string - {0} , float - {1}".format('hello world',3.144343))
+#string - hello world , float - 3.144343
+print("string - {1} , float - {0}".format(3.144343,'hello world'))
+#string - hello world , float - 3.144343
+print("{0}{0}{0}".format("hello "))
