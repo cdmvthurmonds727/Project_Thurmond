@@ -1,0 +1,133 @@
+#  Created by DeLuca Thurmond
+#  Date:  07/31/2022 
+#  Version:  1.0
+#  Here are the libraries required to run the program effectively
+import numpy as np
+import pandas as pd 
+import collections
+import json
+import pytz
+import datetime
+import numpy as np
+from datetime import datetime
+
+# Reads the SatelliteData csv file
+df = pd.read_csv('SatelliteData.csv', header=0, usecols= ['timestamp','satellite-id','red-high-limit','yellow-high-limit','yellow-low-limit','red-low-limit','raw-value','component'])
+# Establishs the date format of the panda series
+df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce', format="%Y%m%dT%H:%M:%S.%f%z")
+df['Num_Rows'] = np.array(['0','1','2','3','4','5','6','7','8','9','10','11','12','13']) #Created a new column label Num_Rows 
+df.set_index('Num_Rows') #Sets the Num_Rows as the index
+
+# Validation values 
+#print(df)
+#pd.options.display.max_rows = 14
+#print("\n**************************************************************************************************************************************\n")
+#print(df.dtypes)
+#print("\n*******************************\n")
+#print(df['timestamp'])
+#df['index_col'] = df.apply(lambda x: datetime64(x))
+#print(df.values)
+
+
+
+#If for the same satellite there are three thermostat readings that exceed the red high limit within a five minute interval")
+#*******************************************Multiplequeriesforredhighlimit**********************************************************************************\n")3
+#print("\n**************************************************High Tempature queries*************************************************************************")
+ht_query = df.loc[(df['satellite-id'].eq(1000)) & (df['component'].eq("TSTAT")) & (df['red-high-limit'].lt(102))]
+#print(h_query)
+#print(ht_query[0:1])
+# Creates the row lock for the result of the query based on the criteria
+h_query = ht_query[0:1]
+################################################################################################################################
+h_satellite_Id = h_query.loc[:,"satellite-id"].values
+#satelliteId = h_query['satellite-id']
+h_component_id = h_query.loc[:,"component"].values
+ht_json = h_query.loc[:,'timestamp'].values
+h_severity_code = "RED HIGH"
+ht_date = h_query.loc[:,'timestamp'].values
+ht_yr = h_query.loc[:,'timestamp'].dt.year
+ht_mon = h_query.loc[:,'timestamp'].dt.month
+ht_day = h_query.loc[:,'timestamp'].dt.day
+ht_hr = h_query.loc[:,'timestamp'].dt.hour
+ht_min = h_query.loc[:,'timestamp'].dt.minute
+ht_sec = h_query.loc[:,'timestamp'].dt.second
+ht_msec = h_query.loc[:,'timestamp'].dt.microsecond
+ht_Num = h_query.loc[:,'Num_Rows'].values
+ht_raw = h_query.loc[:,'raw-value'].values
+# Validation values
+#print(df.loc[1,['timestamp', 'satellite-id', 'component', 'raw-value']])
+#print(ht_json)
+#print(ht_Num)
+#print(h_satellite_Id)
+#print(h_severity_code)
+#print(h_component_id)
+#print(ht_raw)
+#print(ht_yr)
+#print(ht_mon)
+#print(dt_day)
+#print(ht_hr)
+#print(ht_min)
+#print(ht_sec)
+#print(ht_msec)
+
+# Creating a JSON Format with results of First, criteria
+print('[')
+print('     {')
+print('          "satellite-Id"' + ': ' + '{}'.format(h_satellite_Id)+",")
+print('          "component"' + ': ' + '"{}"'.format(h_component_id)+",")
+print('          "severity"' + ': ' + '"{}"'.format(h_severity_code)+",")
+print('          "timestamp"' + ': ' + '{}'.format(ht_json))
+print("     {"+",")
+#*******************************************************************************************************************************************************
+
+#print("\n**************************************************Multiple queries*******************************************************************************************")
+#print(df.loc[(df['satellite-id'].eq(1000)) & (df['component'].eq("BATT")) & (df['raw-value'].lt(7.9)) & (df['raw-value'].gt(7.7))]) 
+#print(df.loc[(df['satellite-id'])]) 
+#Information for the query of the lowest BATT reading
+m_query = df.loc[(df['satellite-id'].eq(1000)) & (df['component'].eq("BATT")) & (df['raw-value'].lt(7.9)) & (df['raw-value'].gt(7.7))]
+#print(m_query['satellite-id'])
+#print(m_query)
+satellite_Id = m_query.loc[1:2,"satellite-id"].values # Converts query results from satellite-id
+#satelliteId = m_query['satellite-id']                    
+component_id = m_query.loc[1:8,"component"].values     # Converts query results from component
+dt_json = m_query.loc[:,'timestamp'].values            # Converts query results from timestamp 
+severity_code = "RED LOW"                              # Establishes severity code for the json format        
+
+#  Validation values    
+#dt_yr = m_query.loc[:,'timestamp'].dt.year
+#dt_mon = m_query.loc[:,'timestamp'].dt.month
+#dt_day = m_query.loc[:,'timestamp'].dt.day
+#dt_hr = m_query.loc[:,'timestamp'].dt.hour
+#dt_min = m_query.loc[:,'timestamp'].dt.minute
+#dt_sec = m_query.loc[:,'timestamp'].dt.second
+#dt_msec = m_query.loc[:,'timestamp'].dt.microsecond
+dt_Num = m_query.loc[:,'Num_Rows'].values
+dt_date = m_query.loc[:,'timestamp'].values
+# Validating the values required for the formatting of the JSON File
+#print(dt_json)
+#print(dt_Num)
+#print(df.loc[1,['timestamp', 'satellite-id', 'component', 'raw-value']])
+#print(satellite_Id)
+#print(severity_code)
+#print(component_id)
+#print(dt_yr)
+#print(dt_mon)
+#print(dt_day)
+#print(dt_hr)
+#print(dt_min)
+#print(dt_sec)
+#print(dt_msec)
+
+# Creating a JSON Format with results of First, criteria
+print('[')
+print('     {')
+print('          "satellite-Id"' + ': ' + '{}'.format(satellite_Id)+",")
+print('          "component"' + ': ' + '"{}"'.format(component_id)+",")
+print('          "severity"' + ': ' + '"{}"'.format(severity_code)+",")
+print('          "timestamp"' + ': ' + '{}'.format(dt_date))
+print("     {")
+print(']')
+
+#print("\n")
+#print(m_query.columns.tolist())
+#print("\n")
